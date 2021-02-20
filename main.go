@@ -23,13 +23,25 @@ func ontrayrightclick(w *wingo.Window) {
 	traymenu.StartContext(w)
 
 }
+
+var mainview webview.WebView
+
+func onresize(w *wingo.Window, xy wingo.Vector) {
+	if nil != mainview {
+		mainview.SetSize(xy.X, xy.Y, webview.HintNone)
+
+	}
+}
 func oncreate(w *wingo.Window, url string) {
 
 	hand := w.GetHandle()
-	wv := webview.NewWindow(true, unsafe.Pointer(&hand))
-	wv.Navigate(url + "/static/index.html")
-	wv.Run()
-	defer wv.Destroy()
+	mainview = webview.NewWindow(true, unsafe.Pointer(&hand))
+
+	//mainview=&wv
+	mainview.Navigate(url + "/static/index.html")
+
+	mainview.Run()
+	defer mainview.Destroy()
 }
 
 var traymenu *wingo.Menu
@@ -72,6 +84,7 @@ func main() {
 	size := wingo.Vector{500, 500}
 	w.SetSize(size)
 	w.OnClose = onclose
+	w.OnSizeChanged = onresize
 	w.OnTrayClick = ontrayclick
 	w.OnTrayRightClick = ontrayrightclick
 	//w.OnCreate=oncreate
