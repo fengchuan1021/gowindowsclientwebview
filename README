@@ -1,0 +1,5 @@
+#build static data
+go-bindata -o=data/data.go -pkg=data static/...
+
+#compile application
+go build  -ldflags "-extld=gcc -extldflags=resources.syso" main.go
