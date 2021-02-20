@@ -8,6 +8,7 @@ import (
 	"github.com/yamnikov-oleg/wingo"
 	"net"
 	"net/http"
+	"runtime"
 	"unsafe"
 )
 
@@ -32,6 +33,19 @@ func onresize(w *wingo.Window, xy wingo.Vector) {
 
 	}
 }
+func realopenurl(url string) {
+	runtime.LockOSThread()
+	w := webview.New(true)
+	defer w.Destroy()
+	w.Navigate(url)
+	w.Run()
+
+}
+func openurl(url string) int {
+	fmt.Println(url)
+	go realopenurl(url)
+	return 1
+}
 func oncreate(w *wingo.Window, url string) {
 
 	hand := w.GetHandle()
@@ -39,7 +53,7 @@ func oncreate(w *wingo.Window, url string) {
 
 	//mainview=&wv
 	mainview.Navigate(url + "/static/index.html")
-
+	mainview.Bind("open_url", openurl)
 	mainview.Run()
 	defer mainview.Destroy()
 }
