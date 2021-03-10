@@ -1,3 +1,6 @@
+use go create windows exe application,using edge webview (chrome kernel) as gui. 
+compiled szie much smaller the qt webview, or electron.
+
 #build static data
 go-bindata -o=data/data.go -pkg=data static/...
 
